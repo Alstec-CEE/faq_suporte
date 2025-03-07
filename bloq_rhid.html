@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuais</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="btn-expandir">
+            <i class="bi bi-list" id="btn-exp"></i>
+        </div>
+        <ul>
+            <li>
+                <a href="index.html">Home
+
+                </a>
+            </li>
+            <li class="active">
+
+                <a href="#" class="feat-btn">Bloqueio sistema
+                    <span class="seta first rotate"><i class="bi bi-caret-right-fill"></i></span>
+                </a>
+                <ul class="feat-show show">
+                    <li>
+                        <a href="bloq_web.html" >Bloquear Web
+
+                        </a>
+                    </li>
+                    <li>
+                        <a href="bloq_rhid.html" >Bloquear Rhid
+
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" class="serv-btn">Services
+                    <span class="seta second"><i class="bi bi-caret-right-fill"></i></span>
+                </a>
+                <ul class="serv-show">
+                    <li><a href="#">App Design</a></li>
+                    <li><a href="#">Web Design</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Portifolio</a></li>
+            <li><a href="#">Overview</a></li>
+            <li><a href="#">Shortcuts</a></li>
+            <li><a href="#">Feedback</a></li>
+        </ul>
+    </nav>
+    <script src="src/js/script.js"></script>
+    <main>
+        <div class="conteudo">
+
+            <div id="pdf-container"></div> <!-- Aqui as páginas do PDF serão renderizadas -->
+
+            <script>
+                const url = "src/documentos/pdf/bloq_rhid.pdf"; 
+
+                pdfjsLib.getDocument(url).promise.then(pdf => {
+                    const container = document.getElementById("pdf-container");
+
+                    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+                        pdf.getPage(pageNumber).then(page => {
+                            const scale = 1.5;
+                            const viewport = page.getViewport({ scale });
+
+                            // Criando um canvas para cada página
+                            const canvas = document.createElement("canvas");
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+                            container.appendChild(canvas);
+
+                            const context = canvas.getContext("2d");
+
+                            // Renderizando a página no canvas
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+                            page.render(renderContext);
+                        });
+                    }
+                }).catch(error => {
+                    console.error("Erro ao carregar o PDF:", error);
+                });
+            </script>
+        </div>
+    </main>
+</body>
+
+</html>
